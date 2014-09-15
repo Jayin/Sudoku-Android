@@ -47,7 +47,7 @@ public class Main extends BaseActivity {
 
 		adapter = new GvAdapter(this);
 		gv.setAdapter(adapter);
-
+		
 		recevier = new MainBroadcastReceiver();
 		registerReceiver(recevier, new IntentFilter(ACTION));
 	}
@@ -233,14 +233,6 @@ public class Main extends BaseActivity {
 		@Override protected Void doInBackground(Void... arg0) {
 			Sudoku sudoku = new Sudoku(true);
 			try {
-				System.out.println("---I.....surrender--------");
-				System.out.println("-------rawMatrix-------");
-				for (int i = 0; i < Table.ROW; i++) {
-					for (int j = 0; j < Table.ROW; j++) {
-						System.out.print(rawMatrix[i][j] + " ");
-					}
-					System.out.println();
-				}
 				sudoku.init(rawMatrix).solve();
 				int[][] _Matrix = sudoku.getMatrix();
 				U.copyMatrix(curMatrix, _Matrix);
