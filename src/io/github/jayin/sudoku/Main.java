@@ -34,8 +34,8 @@ public class Main extends BaseActivity {
 	SelectDialog selectDialog;
 	LoadDialog loadDialog;
 	long record_time = 0;
-
-	int[][] cur_Matrix = new int[Table.ROW][Table.ROW];
+	int[][] rawMatrix = new int[Table.ROW][Table.ROW];
+	int[][] curMatrix = new int[Table.ROW][Table.ROW];
 
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,7 +62,8 @@ public class Main extends BaseActivity {
 			while ((lineString = br.readLine()) != null) {
 				String[] s = lineString.split(" ");
 				for (int j = 0; j < s.length; j++) {
-					cur_Matrix[line][j] = Integer.parseInt(s[j]);
+					curMatrix[line][j] = Integer.parseInt(s[j]);
+					rawMatrix[line][j] = Integer.parseInt(s[j]);
 				}
 				line++;
 			}
@@ -120,7 +121,7 @@ public class Main extends BaseActivity {
 			int select = intent.getIntExtra("selected", 1);
 			Toast.makeText(Main.this, "you select " + select,
 					Toast.LENGTH_SHORT).show();
-			cur_Matrix[position / Table.ROW][position % Table.ROW] = select;
+			curMatrix[position / Table.ROW][position % Table.ROW] = select;
 			adapter.notifyDataSetInvalidated();
 		}
 	}
@@ -138,7 +139,7 @@ public class Main extends BaseActivity {
 		}
 
 		@Override public Object getItem(int position) {
-			return cur_Matrix[position / Table.ROW][position % Table.ROW];
+			return curMatrix[position / Table.ROW][position % Table.ROW];
 		}
 
 		@Override public long getItemId(int position) {
@@ -159,13 +160,7 @@ public class Main extends BaseActivity {
 				h.line_right = contentView.findViewById(R.id.line_right);
 				h.line_bottom = contentView.findViewById(R.id.line_bottom);
 				// final int _p = position;
-				contentView.setOnClickListener(new OnClickListener() {
-
-					@Override public void onClick(View arg0) {
-						selectDialog.show(position);
-
-					}
-				});
+			
 				contentView.setTag(h);
 			} else {
 				h = (ViewHolder) contentView.getTag();
@@ -173,12 +168,19 @@ public class Main extends BaseActivity {
 			int row = position / Table.ROW;
 			int column = position % Table.ROW;
 			// background
-			if (cur_Matrix[row][column] == 0) {
+			if (curMatrix[row][column] == 0) {
 				h.tv_number.setText("");
-			} else {
-				h.tv_number.setText("" + cur_Matrix[row][column]);
 				h.tv_number.setBackgroundColor(context.getResources().getColor(
-						R.color.grey));
+						android.R.color.white));
+			} else {
+				h.tv_number.setText("" + curMatrix[row][column]);
+				if (rawMatrix[row][column] != 0) {
+					h.tv_number.setBackgroundColor(context.getResources()
+							.getColor(R.color.grey));
+				} else {
+					h.tv_number.setBackgroundColor(context.getResources()
+							.getColor(android.R.color.white));
+				}
 			}
 
 			// line
@@ -192,7 +194,15 @@ public class Main extends BaseActivity {
 			} else {
 				h.line_right.setVisibility(View.VISIBLE);
 			}
+			if (rawMatrix[row][column] == 0) {
+				contentView.setOnClickListener(new OnClickListener() {
 
+					@Override public void onClick(View arg0) {
+						selectDialog.show(curMatrix,position);
+					}
+				});
+			}
+			
 			return contentView;
 		}
 
@@ -208,17 +218,33 @@ public class Main extends BaseActivity {
 		}
 
 		@Override protected void onPostExecute(Void result) {
-			adapter.notifyDataSetInvalidated();
+			adapter = new GvAdapter(getContext());
+			gv.setAdapter(adapter);
 			loadDialog.dismiss();
 		}
 
 		@Override protected Void doInBackground(Void... arg0) {
-			Sudoku sudoku = new Sudoku();
-			sudoku.init(cur_Matrix).solve();
-			int[][] matrix = sudoku.getMatrix();
-			for(int i=0;i<Table.ROW;i++)
-				for(int j=0;j<Table.ROW;j++)
-					cur_Matrix[i][j] = matrix[i][j];
+			Sudoku sudoku = new Sudoku(true);
+			sudoku.init(curMatrix).solve();
+			int[][] _Matrix = sudoku.getMatrix();
+			for (int i = 0; i < Table.ROW; i++)
+				for (int j = 0; j < Table.ROW; j++)
+					curMatrix[i][j] = _Matrix[i][j];
+//			System.out.println("-------_Matrix-------");
+//			for (int i = 0; i < Table.ROW; i++) {
+//				for (int j = 0; j < Table.ROW; j++) {
+//					System.out.print(_Matrix[i][j] + " ");
+//				}
+//				System.out.println();
+//			}
+//			
+//			System.out.println("-------curMatrix-------");
+//			for (int i = 0; i < Table.ROW; i++) {
+//				for (int j = 0; j < Table.ROW; j++) {
+//					System.out.print(_Matrix[i][j] + " ");
+//				}
+//				System.out.println();
+//			}
 			return null;
 		}
 

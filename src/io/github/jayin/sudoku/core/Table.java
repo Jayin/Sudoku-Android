@@ -27,7 +27,7 @@ public class Table {
 			{  7, 7, 7, 8, 8, 8, 9, 9, 9 },
 			{  7, 7, 7, 8, 8, 8, 9, 9, 9 }, };
 	/** 当前数独的矩阵 */
-	private int[][] cur_table = new int[ROW][ROW+1];
+	private int[][] cur_table = new int[ROW][ROW];
 	/** 行状态,第x行的数字y是否已填 0<=x<9,1<=y<=9*/
 	private boolean[][] row = new boolean[ROW][ROW+1];
 	/** 列状态,第x列的数字y是否已填 0<=x<9,1<=y<=9*/
@@ -38,7 +38,9 @@ public class Table {
 	private List<PendingNode> pendingNodes;
 
 	public Table(int[][] table) throws Exception {
-		cur_table = table;
+		for (int i = 0; i < ROW; i++)
+			for (int j = 0; j < ROW; j++)
+				cur_table[i][j] = table[i][j];
 		// 初始化
 		for (int i = 0; i < ROW; i++)
 			for (int j = 0; j < ROW; j++) {
@@ -88,15 +90,16 @@ public class Table {
 			}
 		PendingNode[] nodes = tmpPenddingList.toArray(new PendingNode[]
 			{});
-		Arrays.sort(nodes, new Comparator<PendingNode>() {
+		if(nodes.length>1){
+			Arrays.sort(nodes, new Comparator<PendingNode>() {
 
-			@Override public int compare(PendingNode o1, PendingNode o2) {
-				if (o1.getPendingList().size() > o2.getPendingList().size())
-					return 1;
-				else
+				@Override public int compare(PendingNode o1, PendingNode o2) {
+					if (o1.getPendingList().size() > o2.getPendingList().size())
+						return 1;
 					return -1;
-			}
-		});
+				}
+			});
+		}
 		pendingNodes = (List<PendingNode>) Arrays.asList(nodes);
 	}
 
@@ -153,6 +156,20 @@ public class Table {
 	public int getBlockId(int x, int y) {
 		return module[x][y];
 	}
+	/**
+	 * 获取待填点(x,y)的信息
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public PendingNode getPendingNode(int x,int y){
+		for(PendingNode n : pendingNodes){
+			if(n.getX() == x && n.getY() == y){
+				return n;
+			}
+		}
+		return null;
+	}
 
 	public List<PendingNode> getPendingNodes() {
 		return pendingNodes;
@@ -162,7 +179,7 @@ public class Table {
 	 * @author Jayin
 	 *
 	 */
-	class PendingNode {
+	public class PendingNode {
 		/** 坐标x*/
 		private int x;
 		/** 坐标y*/

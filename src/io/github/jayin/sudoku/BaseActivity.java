@@ -1,6 +1,7 @@
 package io.github.jayin.sudoku;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
@@ -39,5 +40,9 @@ public class BaseActivity extends Activity {
 	 */
 	public void closeActivity() {
 		finish();
+	}
+	
+	public Context getContext(){
+		return this;
 	}
 }

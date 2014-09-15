@@ -2,6 +2,12 @@ package io.github.jayin.sudoku.common;
 
 import io.github.jayin.sudoku.Main;
 import io.github.jayin.sudoku.R;
+import io.github.jayin.sudoku.core.Sudoku;
+import io.github.jayin.sudoku.core.Table;
+import io.github.jayin.sudoku.core.Table.PendingNode;
+
+import java.util.List;
+
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +21,8 @@ import android.widget.TextView;
 
 public class SelectDialog extends Dialog {
 	private int mPosition;
+	int[][] curMatrix = new int[Table.ROW][Table.ROW];
+	List<Integer> pendingNumber;
 
 	public SelectDialog(Context context) {
 		this(context, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
@@ -31,15 +39,13 @@ public class SelectDialog extends Dialog {
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dlg_select);
-
 		gv = (GridView) findViewById(R.id.gv);
-		gv.setAdapter(new SelectAdapter());
-
 	}
 
 	@Override protected void onStart() {
 		super.onStart();
 		Log.d("debug", "onstart..");
+		gv.setAdapter(new SelectAdapter());
 	}
 
 	@Override protected void onStop() {
@@ -47,9 +53,24 @@ public class SelectDialog extends Dialog {
 		Log.d("debug", "onStop..");
 	}
 
-	public void show(int position) {
+	public void show(int[][] curMatrix,int position) {
+		Log.d("debug", "show..");
 		super.show();
-		mPosition = position;
+		this.mPosition = position;
+		U.copyMatrix(this.curMatrix, curMatrix);
+		this.curMatrix[position/Table.ROW][position%Table.ROW] = 0;
+		Sudoku sudoku = new Sudoku();
+		for (int i = 0; i < Table.ROW; i++) {
+		for (int j = 0; j < Table.ROW; j++) {
+			System.out.print(this.curMatrix[i][j] + " ");
+		}
+		System.out.println();
+	}
+		PendingNode n = sudoku.init(this.curMatrix).getPendingNode(position/Table.ROW, position%Table.ROW);
+		if(n!=null){
+			pendingNumber = n.getPendingList();
+			Log.d("debug",pendingNumber.toString());
+		}
 	}
 
 	private void sendSelectMsg(int position, int selectedNumber) {
@@ -81,12 +102,17 @@ public class SelectDialog extends Dialog {
 			final int num = numbers[position / 3][position % 3];
 			((TextView) contentView.findViewById(R.id.tv_number)).setText(""
 					+ num);
-			contentView.setOnClickListener(new View.OnClickListener() {
+			if(pendingNumber != null && pendingNumber.contains(num)){
+				contentView.setOnClickListener(new View.OnClickListener() {
 
-				@Override public void onClick(View arg0) {
-					sendSelectMsg(mPosition, position + 1);
-				}
-			});
+					@Override public void onClick(View arg0) {
+						sendSelectMsg(mPosition, position + 1);
+					}
+				});
+			}else{
+				contentView.setBackgroundColor(getContext().getResources().getColor(R.color.grey));
+				((TextView) contentView.findViewById(R.id.tv_number)).setText("X");
+			}
 			return contentView;
 		}
 

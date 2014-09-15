@@ -1,24 +1,34 @@
 package io.github.jayin.sudoku.core;
+
 import io.github.jayin.sudoku.core.Table.PendingNode;
 
 import java.util.List;
 
 /**
- * 数独 <strong>Usage</strong>
- * TODO 根据给出的难度,自动生成一个数独矩阵
+ * 数独 <strong>Usage</strong> TODO 根据给出的难度,自动生成一个数独矩阵
+ * 
  * <pre>
- *  //解
+ * // 解
  * Sudoku sudoku = new Sudoku();
  * sudoku.init(cur_Matrix).solve();
  * </pre>
+ * 
  * <pre>
- * 	 //检查矩阵
- *   new Sudoku.check(cur_Matrix);
+ * // 检查矩阵
+ * new Sudoku.check(cur_Matrix);
  * </pre>
- * <p>实现思路</p>
- * <p>1.计算出每行，每列，每模块的待填列表</p>
- * <p>2.对待填列表排序，待填数较少的排在前面</p>
- * <p>3.待填数为1的，直接填上</p>
+ * <p>
+ * 实现思路
+ * </p>
+ * <p>
+ * 1.计算出每行，每列，每模块的待填列表
+ * </p>
+ * <p>
+ * 2.对待填列表排序，待填数较少的排在前面
+ * </p>
+ * <p>
+ * 3.待填数为1的，直接填上
+ * </p>
  * 
  * @author Jayin
  * 
@@ -31,7 +41,10 @@ public class Sudoku {
 	/** 待填点 */
 	boolean debug = false;
 	/** 起始时间 */
-	long time_start;
+	long startTime;
+	long costTime;
+
+	int[][] result = new int[Table.ROW][Table.ROW];
 
 	public Sudoku() {
 		this(false);
@@ -44,7 +57,7 @@ public class Sudoku {
 	 */
 	public Sudoku(boolean debug) {
 		this.debug = debug;
-		time_start = System.currentTimeMillis();
+		startTime = System.currentTimeMillis();
 	}
 
 	/**
@@ -103,16 +116,17 @@ public class Sudoku {
 	 */
 	private void solve(int cur) {
 		if (cur == pendingNodes.size()) {
-			if (debug)
-				System.out.println("耗时: "
-						+ (System.currentTimeMillis() - time_start) / 1000.0
-						+ " s");
-			int[][] result = table.getCurTable();
-			if (check(result)) {
+			costTime = System.currentTimeMillis() - startTime;
+			if (debug){
+				System.out.println("耗时: " + costTime / 1000.0 + " s");
+			}
+			int[][] res = table.getCurTable();
+			if (check(res)) {
 				// print
 				for (int i = 0; i < Table.ROW; i++) {
 					for (int j = 0; j < Table.ROW; j++) {
-						System.out.print(result[i][j] + " ");
+						System.out.print(res[i][j] + "");
+						result[i][j] = res[i][j];
 					}
 					System.out.println();
 				}
@@ -121,7 +135,7 @@ public class Sudoku {
 			}
 
 		} else {
-			if(pendingNodes.get(cur).getPendingList().size() == 1){
+			if (pendingNodes.get(cur).getPendingList().size() == 1) {
 				PendingNode node = pendingNodes.get(cur);
 				int x = node.getX();
 				int y = node.getY();
@@ -132,14 +146,15 @@ public class Sudoku {
 				table.setColumn(y, v, true);
 				table.setBlock(blockId, v, true);
 				solve(cur + 1);
-			}else{
-				for (int i = 0; i < pendingNodes.get(cur).getPendingList().size(); i++) {
+			} else {
+				for (int i = 0; i < pendingNodes.get(cur).getPendingList()
+						.size(); i++) {
 					PendingNode node = pendingNodes.get(cur);
 					int x = node.getX();
 					int y = node.getY();
 					int v = node.getPendingList().get(i);
 					int blockId = table.getBlockId(x, y);
-					if (table.enableRow(x,  v) && table.enableColumn(y, v)
+					if (table.enableRow(x, v) && table.enableColumn(y, v)
 							&& table.enableBlock(blockId, v)) {
 						table.setCurTable(x, y, v);
 						table.setRow(x, v, true);
@@ -155,11 +170,30 @@ public class Sudoku {
 			}
 		}
 	}
+
 	/**
 	 * 获得当前矩阵
+	 * 
 	 * @return
 	 */
-	public int[][] getMatrix(){
-		return table.getCurTable();
+	public int[][] getMatrix() {
+		return result;
+	}
+	/**
+	 * 获取耗时(单位ms)
+	 * @return
+	 */
+	public long getCostTime(){
+		return costTime;
+	}
+	
+	/**
+	 * 获取待填点(x,y)的信息
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	public PendingNode getPendingNode(int x,int y){
+		return table.getPendingNode(x, y);
 	}
 }
