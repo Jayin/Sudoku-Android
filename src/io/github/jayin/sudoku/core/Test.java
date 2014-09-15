@@ -32,7 +32,11 @@ public class Test {
 				}
 				System.out.println();
 			}
-			new Sudoku(true).init(cur_Matrix).solve();
+			try {
+				new Sudoku(true).init(cur_Matrix).solve();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		} else {
 			System.out.println("not exist");
 		}

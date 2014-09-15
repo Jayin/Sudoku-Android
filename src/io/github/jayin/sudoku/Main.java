@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 import io.github.jayin.sudoku.common.LoadDialog;
 import io.github.jayin.sudoku.common.SelectDialog;
+import io.github.jayin.sudoku.common.U;
 import io.github.jayin.sudoku.core.Sudoku;
 import io.github.jayin.sudoku.core.Table;
 import android.content.BroadcastReceiver;
@@ -119,10 +120,20 @@ public class Main extends BaseActivity {
 		@Override public void onReceive(Context conent, Intent intent) {
 			int position = intent.getIntExtra("position", 1);
 			int select = intent.getIntExtra("selected", 1);
-			Toast.makeText(Main.this, "you select " + select,
-					Toast.LENGTH_SHORT).show();
-			curMatrix[position / Table.ROW][position % Table.ROW] = select;
-			adapter.notifyDataSetInvalidated();
+//			Toast.makeText(Main.this, "you select " + select,
+//					Toast.LENGTH_SHORT).show();
+			System.out.println("you select " + select);
+			try{
+				curMatrix[position / Table.ROW][position % Table.ROW] = select;
+				new Sudoku().init(curMatrix);
+				adapter.notifyDataSetInvalidated();
+			}catch(Exception e){
+				e.printStackTrace();
+				curMatrix[position / Table.ROW][position % Table.ROW] = 0;
+				adapter.notifyDataSetInvalidated();
+				T("It's error!");
+			}
+			
 		}
 	}
 
@@ -225,26 +236,31 @@ public class Main extends BaseActivity {
 
 		@Override protected Void doInBackground(Void... arg0) {
 			Sudoku sudoku = new Sudoku(true);
-			sudoku.init(curMatrix).solve();
-			int[][] _Matrix = sudoku.getMatrix();
-			for (int i = 0; i < Table.ROW; i++)
-				for (int j = 0; j < Table.ROW; j++)
-					curMatrix[i][j] = _Matrix[i][j];
-//			System.out.println("-------_Matrix-------");
-//			for (int i = 0; i < Table.ROW; i++) {
-//				for (int j = 0; j < Table.ROW; j++) {
-//					System.out.print(_Matrix[i][j] + " ");
-//				}
-//				System.out.println();
-//			}
-//			
-//			System.out.println("-------curMatrix-------");
-//			for (int i = 0; i < Table.ROW; i++) {
-//				for (int j = 0; j < Table.ROW; j++) {
-//					System.out.print(_Matrix[i][j] + " ");
-//				}
-//				System.out.println();
-//			}
+			try {
+				System.out.println("---I.....surrender--------");
+				sudoku.init(rawMatrix).solve();
+				int[][] _Matrix = sudoku.getMatrix();
+				U.copyMatrix(curMatrix, _Matrix);
+				System.out.println("---surrender--------");
+				System.out.println("-------_Matrix-------");
+				for (int i = 0; i < Table.ROW; i++) {
+					for (int j = 0; j < Table.ROW; j++) {
+						System.out.print(_Matrix[i][j] + " ");
+					}
+					System.out.println();
+				}
+				
+				System.out.println("-------curMatrix-------");
+				for (int i = 0; i < Table.ROW; i++) {
+					for (int j = 0; j < Table.ROW; j++) {
+						System.out.print(_Matrix[i][j] + " ");
+					}
+					System.out.println();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			return null;
 		}
 

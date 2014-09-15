@@ -48,7 +48,7 @@ public class Table {
 					int v = cur_table[i][j];
 					
 					if(getRow(i, v) || getColumn(j, v) || getBlock(getBlockId(i, j), v)){
-						throw new Exception("构建失败:数独不符合规定");
+						throw new RuntimeException("构建失败:数独不符合规定");
 					}
 					setRow(i, v, true);
 					setColumn(j, v, true);
@@ -60,7 +60,6 @@ public class Table {
 		for (int i = 0; i < ROW; i++)
 			for (int j = 0; j < ROW; j++) {
 				if (cur_table[i][j] == 0) {
-					System.out.println("x= "+i+" y= "+j);
 					// 求一个点的待填数
 					Map<Integer, Boolean> filled = new HashMap<Integer, Boolean>();
 
@@ -90,16 +89,16 @@ public class Table {
 			}
 		PendingNode[] nodes = tmpPenddingList.toArray(new PendingNode[]
 			{});
-		if(nodes.length>1){
-			Arrays.sort(nodes, new Comparator<PendingNode>() {
+		Arrays.sort(nodes, new Comparator<PendingNode>() {
 
-				@Override public int compare(PendingNode o1, PendingNode o2) {
-					if (o1.getPendingList().size() > o2.getPendingList().size())
-						return 1;
-					return -1;
-				}
-			});
-		}
+			@Override public int compare(PendingNode o1, PendingNode o2) {
+				if(o1.getPendingList().size() == o2.getPendingList().size())
+					return 0;
+				if (o1.getPendingList().size() > o2.getPendingList().size())
+					return 1;
+				return -1;
+			}
+		});
 		pendingNodes = (List<PendingNode>) Arrays.asList(nodes);
 	}
 

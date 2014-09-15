@@ -86,9 +86,9 @@ public class Sudoku {
 	 * 
 	 * @param cur_Matrix
 	 * @return
+	 * @throws Exception 
 	 */
-	public Sudoku init(int[][] cur_Matrix) {
-		try {
+	public Sudoku init(int[][] cur_Matrix) throws Exception {
 			table = new Table(cur_Matrix);
 			pendingNodes = table.getPendingNodes();
 			if (debug) {
@@ -96,9 +96,7 @@ public class Sudoku {
 					System.out.println(node.toString());
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	
 		return this;
 	}
 
