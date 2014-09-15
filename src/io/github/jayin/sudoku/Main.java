@@ -25,7 +25,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class Main extends BaseActivity {
 	public static final String ACTION = "Main";
@@ -95,7 +94,6 @@ public class Main extends BaseActivity {
 
 	@Override public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.surrender) {
-			// TODO 显示答案..
 			T("鄙视你,居然认输..");
 			new SolveTask().execute();
 			return true;
@@ -120,8 +118,6 @@ public class Main extends BaseActivity {
 		@Override public void onReceive(Context conent, Intent intent) {
 			int position = intent.getIntExtra("position", 1);
 			int select = intent.getIntExtra("selected", 1);
-//			Toast.makeText(Main.this, "you select " + select,
-//					Toast.LENGTH_SHORT).show();
 			System.out.println("you select " + select);
 			try{
 				curMatrix[position / Table.ROW][position % Table.ROW] = select;
@@ -238,25 +234,16 @@ public class Main extends BaseActivity {
 			Sudoku sudoku = new Sudoku(true);
 			try {
 				System.out.println("---I.....surrender--------");
+				System.out.println("-------rawMatrix-------");
+				for (int i = 0; i < Table.ROW; i++) {
+					for (int j = 0; j < Table.ROW; j++) {
+						System.out.print(rawMatrix[i][j] + " ");
+					}
+					System.out.println();
+				}
 				sudoku.init(rawMatrix).solve();
 				int[][] _Matrix = sudoku.getMatrix();
 				U.copyMatrix(curMatrix, _Matrix);
-				System.out.println("---surrender--------");
-				System.out.println("-------_Matrix-------");
-				for (int i = 0; i < Table.ROW; i++) {
-					for (int j = 0; j < Table.ROW; j++) {
-						System.out.print(_Matrix[i][j] + " ");
-					}
-					System.out.println();
-				}
-				
-				System.out.println("-------curMatrix-------");
-				for (int i = 0; i < Table.ROW; i++) {
-					for (int j = 0; j < Table.ROW; j++) {
-						System.out.print(_Matrix[i][j] + " ");
-					}
-					System.out.println();
-				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

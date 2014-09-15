@@ -7,7 +7,6 @@ import io.github.jayin.sudoku.core.Table;
 import io.github.jayin.sudoku.core.Table.PendingNode;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.Dialog;
@@ -63,13 +62,6 @@ public class SelectDialog extends Dialog {
 		this.curMatrix[position / Table.ROW][position % Table.ROW] = 0;
 		pendingNumber.clear();
 		Sudoku sudoku = new Sudoku();
-		System.out.println("SelectDialog-->show");
-		for (int i = 0; i < Table.ROW; i++) {
-			for (int j = 0; j < Table.ROW; j++) {
-				System.out.print(this.curMatrix[i][j] + " ");
-			}
-			System.out.println();
-		}
 		PendingNode n = null;
 		try {
 			n = sudoku.init(this.curMatrix).getPendingNode(
