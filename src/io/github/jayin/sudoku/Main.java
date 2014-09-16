@@ -10,8 +10,10 @@ import io.github.jayin.sudoku.common.TimeRecorderTextView;
 import io.github.jayin.sudoku.common.U;
 import io.github.jayin.sudoku.core.Sudoku;
 import io.github.jayin.sudoku.core.Table;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
@@ -47,11 +49,11 @@ public class Main extends BaseActivity {
 		getMatrix();
 		gv = getView(R.id.gv);
 		timeRecorder = getView(R.id.tv_timerecord);
-		
+
 		timeRecorder.clean();
 		adapter = new GvAdapter(this);
 		gv.setAdapter(adapter);
-		
+
 		recevier = new MainBroadcastReceiver();
 		registerReceiver(recevier, new IntentFilter(ACTION));
 	}
@@ -83,8 +85,25 @@ public class Main extends BaseActivity {
 			}
 		}
 	}
-	
-	
+
+	private void checkMatrix() {
+		Sudoku sudoku = new Sudoku();
+		if (sudoku.check(curMatrix)) {
+			AlertDialog dialog = new AlertDialog.Builder(this)
+					.setTitle("恭喜完成数独! 耗时:"+timeRecorder.getCostTime()+"s")
+					.setCancelable(true)
+					.setNegativeButton("分享",
+							new DialogInterface.OnClickListener() {
+
+								@Override public void onClick(
+										DialogInterface arg0, int arg1) {
+										//TODO share......==
+										T("share....");
+								}
+							}).create();
+			dialog.show();
+		}
+	}
 
 	@Override protected void onPause() {
 		super.onPause();
@@ -113,8 +132,6 @@ public class Main extends BaseActivity {
 			T("鄙视你,居然认输..");
 			timeRecorder.clean();
 			new SolveTask().execute();
-			
-			
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -138,17 +155,18 @@ public class Main extends BaseActivity {
 			int position = intent.getIntExtra("position", 1);
 			int select = intent.getIntExtra("selected", 1);
 			System.out.println("you select " + select);
-			try{
+			try {
 				curMatrix[position / Table.ROW][position % Table.ROW] = select;
 				new Sudoku().init(curMatrix);
 				adapter.notifyDataSetInvalidated();
-			}catch(Exception e){
+				checkMatrix();
+			} catch (Exception e) {
 				e.printStackTrace();
 				curMatrix[position / Table.ROW][position % Table.ROW] = 0;
 				adapter.notifyDataSetInvalidated();
 				T("It's error!");
 			}
-			
+
 		}
 	}
 
@@ -186,7 +204,7 @@ public class Main extends BaseActivity {
 				h.line_right = contentView.findViewById(R.id.line_right);
 				h.line_bottom = contentView.findViewById(R.id.line_bottom);
 				// final int _p = position;
-			
+
 				contentView.setTag(h);
 			} else {
 				h = (ViewHolder) contentView.getTag();
@@ -224,11 +242,10 @@ public class Main extends BaseActivity {
 				contentView.setOnClickListener(new OnClickListener() {
 
 					@Override public void onClick(View arg0) {
-						selectDialog.show(curMatrix,position);
+						selectDialog.show(curMatrix, position);
 					}
 				});
 			}
-			
 			return contentView;
 		}
 
