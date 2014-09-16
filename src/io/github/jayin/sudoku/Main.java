@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 import io.github.jayin.sudoku.common.LoadDialog;
 import io.github.jayin.sudoku.common.SelectDialog;
+import io.github.jayin.sudoku.common.TimeRecorderTextView;
 import io.github.jayin.sudoku.common.U;
 import io.github.jayin.sudoku.core.Sudoku;
 import io.github.jayin.sudoku.core.Table;
@@ -33,6 +34,7 @@ public class Main extends BaseActivity {
 	GvAdapter adapter;
 	SelectDialog selectDialog;
 	LoadDialog loadDialog;
+	TimeRecorderTextView timeRecorder;
 	long record_time = 0;
 	int[][] rawMatrix = new int[Table.ROW][Table.ROW];
 	int[][] curMatrix = new int[Table.ROW][Table.ROW];
@@ -43,8 +45,10 @@ public class Main extends BaseActivity {
 		selectDialog = new SelectDialog(this);
 		loadDialog = new LoadDialog(this);
 		getMatrix();
-		gv = (GridView) findViewById(R.id.gv);
-
+		gv = getView(R.id.gv);
+		timeRecorder = getView(R.id.tv_timerecord);
+		
+		timeRecorder.clean();
 		adapter = new GvAdapter(this);
 		gv.setAdapter(adapter);
 		
@@ -79,6 +83,18 @@ public class Main extends BaseActivity {
 			}
 		}
 	}
+	
+	
+
+	@Override protected void onPause() {
+		super.onPause();
+		timeRecorder.stopTiming();
+	}
+
+	@Override protected void onResume() {
+		super.onResume();
+		timeRecorder.startTiming();
+	}
 
 	@Override protected void onDestroy() {
 		super.onDestroy();
@@ -95,7 +111,10 @@ public class Main extends BaseActivity {
 	@Override public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == R.id.surrender) {
 			T("鄙视你,居然认输..");
+			timeRecorder.clean();
 			new SolveTask().execute();
+			
+			
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -239,7 +258,6 @@ public class Main extends BaseActivity {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 			return null;
 		}
 

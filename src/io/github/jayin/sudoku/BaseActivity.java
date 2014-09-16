@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 public class BaseActivity extends Activity {
@@ -33,6 +34,10 @@ public class BaseActivity extends Activity {
 	 */
 	public void openActivity(Class<?> cls) {
 		startActivity(new Intent(this, cls));
+	}
+	
+	@SuppressWarnings("unchecked") public <E extends View > E getView(int resId){
+		return (E)findViewById(resId);
 	}
 
 	/**
