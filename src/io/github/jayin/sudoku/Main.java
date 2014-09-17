@@ -102,6 +102,7 @@ public class Main extends BaseActivity {
 								}
 							}).create();
 			dialog.show();
+			timeRecorder.stopTiming();
 		}
 	}
 
