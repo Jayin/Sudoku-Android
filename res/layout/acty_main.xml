@@ -5,18 +5,46 @@
     android:background="@android:color/black"
     android:orientation="vertical" >
 
-    <io.github.jayin.sudoku.common.TimeRecorderTextView
-        android:id="@+id/tv_timerecord"
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="hi" android:textColor="@android:color/white" />
+        android:layout_height="match_parent" android:background="@android:color/black" >
 
-    <GridView
-        android:id="@+id/gv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:numColumns="9" >
-    </GridView>
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/drawer_left"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#ff333333"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/btn_select"
+                style="@style/TextView.DrawerLayout"
+                android:text="Select Sudoku" />
+
+            <View style="@style/Line.vertical" />
+
+            <TextView
+                    android:id="@+id/btn_introduction"
+                style="@style/TextView.DrawerLayout"
+                android:text="Introduction" />
+
+            <View style="@style/Line.vertical" />
+
+            <TextView
+                    android:id="@+id/btn_about"
+                style="@style/TextView.DrawerLayout"
+                android:text="About App" />
+
+            <View style="@style/Line.vertical" />
+        </LinearLayout>
+    </android.support.v4.widget.DrawerLayout>
 
 </LinearLayout>

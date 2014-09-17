@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 public class SelectDialog extends Dialog {
 	private int mPosition;
+	private static  final String ACTION = "select";
 	int[][] curMatrix = new int[Table.ROW][Table.ROW];
 	List<Integer> pendingNumber = new ArrayList<Integer>();
 
@@ -85,7 +86,7 @@ public class SelectDialog extends Dialog {
 	 *            选中的数字
 	 */
 	private void sendSelectMsg(int position, int selectedNumber) {
-		Intent intent = new Intent(Main.ACTION);
+		Intent intent = new Intent(SelectDialog.ACTION);
 		intent.putExtra("position", position);
 		intent.putExtra("selected", selectedNumber);
 		getContext().sendBroadcast(intent);

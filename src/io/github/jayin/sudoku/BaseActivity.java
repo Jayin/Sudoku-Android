@@ -1,13 +1,13 @@
 package io.github.jayin.sudoku;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-public class BaseActivity extends Activity {
+public class BaseActivity extends FragmentActivity {
 	/**
 	 * toast a string
 	 * 
