@@ -15,67 +15,66 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
- 
-public class Main extends BaseActivity implements View.OnClickListener{
-    private DrawerLayout mDrawerLayout;
-    private ViewGroup mDrawerLeft;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private ActionBar mActionBar;
+
+public class Main extends BaseActivity implements View.OnClickListener {
+	private DrawerLayout mDrawerLayout;
+	private ViewGroup mDrawerLeft;
+	private ActionBarDrawerToggle mDrawerToggle;
+	private ActionBar mActionBar;
 	private long record_time;
-	private FragmentManager mFragmentManager   ;
- 
+	private FragmentManager mFragmentManager;
+
 	@Override protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acty_main);
-		
-		mFragmentManager  = getSupportFragmentManager();
-		
+
+		mFragmentManager = getSupportFragmentManager();
+
 		mDrawerLeft = getView(R.id.drawer_left);
-		
+
 		mActionBar = getActionBar();
 		mActionBar.setDisplayHomeAsUpEnabled(true);
 		mActionBar.setHomeButtonEnabled(true);
-		
-		//DrawerLayout
+
+		// DrawerLayout
 		mDrawerLayout = getView(R.id.drawer_layout);
-		mFragmentManager.beginTransaction().add(R.id.container,new About(),"About").commit();
-		mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.drawable.ic_drawer,R.string.drawer_open,R.string.drawer_close);
+		setMainFragment(new SelectSudoku());
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				R.drawable.ic_drawer, R.string.drawer_open,
+				R.string.drawer_close);
 		mDrawerLayout.setDrawerListener(new MainDrawerListener());
-		
-		//left drawer
+
+		// left drawer
 		getView(R.id.btn_about).setOnClickListener(this);
 		getView(R.id.btn_introduction).setOnClickListener(this);
 		getView(R.id.btn_select).setOnClickListener(this);
 	}
-	
-	public void setMainFragment(Fragment fragment){
-		mFragmentManager.popBackStack();
-		mFragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+	public void setMainFragment(Fragment fragment) {
+		mFragmentManager.beginTransaction().replace(R.id.container, fragment)
+				.commit();
 	}
-	
-	@Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+	@Override protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		mDrawerToggle.syncState();
+	}
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
+	@Override public boolean onOptionsItemSelected(MenuItem item) {
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		mDrawerToggle.onConfigurationChanged(newConfig);
+	}
 
 	@Override public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if(mDrawerLayout.isDrawerOpen(mDrawerLeft)){
+			if (mDrawerLayout.isDrawerOpen(mDrawerLeft)) {
 				mDrawerLayout.closeDrawers();
 				return true;
 			}
@@ -88,50 +87,46 @@ public class Main extends BaseActivity implements View.OnClickListener{
 		}
 		return super.onKeyUp(keyCode, event);
 	}
-	 
-	private class MainDrawerListener implements DrawerListener{
 
-		   @Override
-	        public void onDrawerOpened(View drawerView) {
-	            mDrawerToggle.onDrawerOpened(drawerView);
-	            mActionBar.setTitle(getResources().getString(R.string.app_setting));
-	        }
+	private class MainDrawerListener implements DrawerListener {
 
-	        @Override
-	        public void onDrawerClosed(View drawerView) {
-	            mDrawerToggle.onDrawerClosed(drawerView);
-	            mActionBar.setTitle(getResources().getString(R.string.app_name));
-	        }
+		@Override public void onDrawerOpened(View drawerView) {
+			mDrawerToggle.onDrawerOpened(drawerView);
+			mActionBar.setTitle(getResources().getString(R.string.app_setting));
+		}
 
-	        @Override
-	        public void onDrawerSlide(View drawerView, float slideOffset) {
-	            mDrawerToggle.onDrawerSlide(drawerView, slideOffset);
-	        }
+		@Override public void onDrawerClosed(View drawerView) {
+			mDrawerToggle.onDrawerClosed(drawerView);
+			mActionBar.setTitle(getResources().getString(R.string.app_name));
+		}
 
-	        @Override
-	        public void onDrawerStateChanged(int newState) {
-	            mDrawerToggle.onDrawerStateChanged(newState);
-	        }
-		
+		@Override public void onDrawerSlide(View drawerView, float slideOffset) {
+			mDrawerToggle.onDrawerSlide(drawerView, slideOffset);
+		}
+
+		@Override public void onDrawerStateChanged(int newState) {
+			mDrawerToggle.onDrawerStateChanged(newState);
+		}
+
 	}
 
 	@Override public void onClick(View v) {
-		 mDrawerLayout.closeDrawers();
-		 
-		 switch (v.getId()) {
-				case R.id.btn_about:
-					setMainFragment(new About());
-					break;
-				case R.id.btn_introduction:
-					setMainFragment(new Introduction());
-							break;
-				case R.id.btn_select:
-					setMainFragment(new SelectSudoku());
-					break;
-				default:
-					T("default");
-					break;
-				}
+		mDrawerLayout.closeDrawers();
+
+		switch (v.getId()) {
+		case R.id.btn_about:
+			setMainFragment(new About());
+			break;
+		case R.id.btn_introduction:
+			setMainFragment(new Introduction());
+			break;
+		case R.id.btn_select:
+			setMainFragment(new SelectSudoku());
+			break;
+		default:
+			T("default");
+			break;
+		}
 	}
- 
+
 }

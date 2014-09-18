@@ -50,4 +50,6 @@ public class BaseActivity extends FragmentActivity {
 	public Context getContext(){
 		return this;
 	}
+	
+	
 }
