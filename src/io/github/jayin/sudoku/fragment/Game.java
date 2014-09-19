@@ -98,7 +98,8 @@ public class Game extends BaseFragment {
 	}
 
 	@Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		inflater.inflate(R.menu.acty_main, menu);
+		menu.clear();
+		inflater.inflate(R.menu.fragment_game, menu);
 
 	}
 
