@@ -124,7 +124,7 @@ public class CopyOfMain extends BaseActivity {
 	}
 
 	@Override public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.acty_main, menu);
+		getMenuInflater().inflate(R.menu.fragment_game, menu);
 		return true;
 	}
 

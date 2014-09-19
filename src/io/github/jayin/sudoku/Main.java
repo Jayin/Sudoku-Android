@@ -61,6 +61,11 @@ public class Main extends BaseActivity implements View.OnClickListener {
 				.commit();
 	}
 	
+	@Override public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.acty_main, menu);
+		return true;
+	}
+
 	@Override protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		mDrawerToggle.syncState();

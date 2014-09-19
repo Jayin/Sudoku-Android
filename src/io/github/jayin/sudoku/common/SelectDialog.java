@@ -1,6 +1,5 @@
 package io.github.jayin.sudoku.common;
 
-import io.github.jayin.sudoku.Main;
 import io.github.jayin.sudoku.R;
 import io.github.jayin.sudoku.core.Sudoku;
 import io.github.jayin.sudoku.core.Table;
@@ -11,7 +10,6 @@ import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -19,12 +17,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
-
+/**
+ * 选择数字
+ * @author Jayin
+ *
+ */
 public class SelectDialog extends Dialog {
 	private int mPosition;
-	private static  final String ACTION = "select";
-	int[][] curMatrix = new int[Table.ROW][Table.ROW];
-	List<Integer> pendingNumber = new ArrayList<Integer>();
+	private int[][] curMatrix = new int[Table.ROW][Table.ROW];
+	private List<Integer> pendingNumber = new ArrayList<Integer>();
+	private onNumberSelectListener listener;
 
 	public SelectDialog(Context context) {
 		this(context, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
@@ -77,20 +79,10 @@ public class SelectDialog extends Dialog {
 			Log.d("debug", pendingNumber.toString());
 		}
 	}
-
-	/**
-	 * 
-	 * @param position
-	 *            第x个点
-	 * @param selectedNumber
-	 *            选中的数字
-	 */
-	private void sendSelectMsg(int position, int selectedNumber) {
-		Intent intent = new Intent(SelectDialog.ACTION);
-		intent.putExtra("position", position);
-		intent.putExtra("selected", selectedNumber);
-		getContext().sendBroadcast(intent);
-		this.dismiss();
+	
+	
+	public void setOnNumberSelectListener(onNumberSelectListener l){
+		this.listener = l;
 	}
 
 	class SelectAdapter extends BaseAdapter {
@@ -118,7 +110,10 @@ public class SelectDialog extends Dialog {
 				contentView.setOnClickListener(new View.OnClickListener() {
 
 					@Override public void onClick(View arg0) {
-						sendSelectMsg(mPosition, position + 1);
+						if(listener!=null){
+							listener.onSelect(mPosition, position+1);
+						}
+						dismiss();
 					}
 				});
 			} else {
@@ -129,12 +124,24 @@ public class SelectDialog extends Dialog {
 				contentView.setOnClickListener(new View.OnClickListener() {
 
 					@Override public void onClick(View arg0) {
-						sendSelectMsg(mPosition, 0);
+						if(listener!=null){
+							listener.onSelect(mPosition, 0);
+							
+						}
+						dismiss();
 					}
 				});
 			}
 			return contentView;
 		}
-
+	}
+	
+	public interface onNumberSelectListener{
+		/**
+		 * 
+		 * @param positon the position of matrix
+		 * @param number the number you selected
+		 */
+		public void onSelect(int position,int number);
 	}
 }

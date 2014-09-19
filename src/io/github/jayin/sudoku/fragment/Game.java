@@ -5,14 +5,17 @@ import io.github.jayin.sudoku.common.LoadDialog;
 import io.github.jayin.sudoku.common.SelectDialog;
 import io.github.jayin.sudoku.common.TimeRecorderTextView;
 import io.github.jayin.sudoku.common.U;
+import io.github.jayin.sudoku.common.SelectDialog.onNumberSelectListener;
 import io.github.jayin.sudoku.core.Sudoku;
 import io.github.jayin.sudoku.core.Table;
+
+import java.io.File;
+
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,11 +29,8 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
-public class Game extends BaseFragment {
-	public static final String ACTION = "Game";
-
+public class Game extends BaseFragment implements onNumberSelectListener{
 	private int lv, num;
-	MainBroadcastReceiver recevier;
 	GridView gv;
 	GvAdapter adapter;
 	SelectDialog selectDialog;
@@ -57,14 +57,18 @@ public class Game extends BaseFragment {
 		}
 		// 通知系统刷新这里的OptionMenu
 		setHasOptionsMenu(true);
+		
 	}
 
 	@Override public View onCreateView(LayoutInflater inflater,
 			ViewGroup container, Bundle savedInstanceState) {
 
 		View v = inflater.inflate(R.layout.fragment_game, container, false);
-		selectDialog = new SelectDialog(getContext());
-		loadDialog = new LoadDialog(getContext());
+		selectDialog = new SelectDialog(getActivity());
+		selectDialog.setOnNumberSelectListener(this);
+		
+		
+		loadDialog = new LoadDialog(getActivity());
 		U.copyMatrix(rawMatrix, U.readMatrix(getContext(), lv, num));
 		U.copyMatrix(curMatrix, rawMatrix);
 		gv = getView(v, R.id.gv);
@@ -74,10 +78,21 @@ public class Game extends BaseFragment {
 		adapter = new GvAdapter(getContext());
 		gv.setAdapter(adapter);
 
-		recevier = new MainBroadcastReceiver();
-		getContext().registerReceiver(recevier, new IntentFilter(ACTION));
-
 		return v;
+	}
+	
+	
+	private void share(){
+		U.screenShot(getView());
+		String text = "这个数独我耗时 "+timeRecorder.getText() +" !不服?想挑战我?赶紧下载来玩玩吧！";
+		
+		Intent sendIntent = new Intent();
+		sendIntent.setAction(Intent.ACTION_SEND);
+		sendIntent.setType("image/*");
+		sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(U.getScreenShotPath())));
+		sendIntent.putExtra(Intent.EXTRA_TEXT,text);
+		sendIntent.putExtra("Kdescription", text);
+		startActivity(sendIntent);
 	}
 
 	@Override public void onStart() {
@@ -90,17 +105,9 @@ public class Game extends BaseFragment {
 		timeRecorder.stopTiming();
 	}
 
-	@Override public void onDestroy() {
-		super.onDestroy();
-		if (recevier != null) {
-			getContext().unregisterReceiver(recevier);
-		}
-	}
-
 	@Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		menu.clear();
 		inflater.inflate(R.menu.fragment_game, menu);
-
 	}
 
 	@Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -111,27 +118,6 @@ public class Game extends BaseFragment {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	class MainBroadcastReceiver extends BroadcastReceiver {
-
-		@Override public void onReceive(Context conent, Intent intent) {
-			int position = intent.getIntExtra("position", 1);
-			int select = intent.getIntExtra("selected", 1);
-			System.out.println("you select " + select);
-			try {
-				curMatrix[position / Table.ROW][position % Table.ROW] = select;
-				new Sudoku().init(curMatrix);
-				adapter.notifyDataSetInvalidated();
-				checkMatrix();
-			} catch (Exception e) {
-				e.printStackTrace();
-				curMatrix[position / Table.ROW][position % Table.ROW] = 0;
-				adapter.notifyDataSetInvalidated();
-				T("It's error!");
-			}
-
-		}
 	}
 
 	private void checkMatrix() {
@@ -145,8 +131,7 @@ public class Game extends BaseFragment {
 
 								@Override public void onClick(
 										DialogInterface arg0, int arg1) {
-									// TODO share......==
-									T("share....");
+									share();
 								}
 							}).create();
 			dialog.show();
@@ -154,6 +139,23 @@ public class Game extends BaseFragment {
 		}
 	}
 
+
+	@Override public void onSelect(int position, int number) {
+		try {
+			curMatrix[position / Table.ROW][position % Table.ROW] = number;
+			new Sudoku().init(curMatrix);
+			adapter.notifyDataSetInvalidated();
+			checkMatrix();
+		} catch (Exception e) {
+			e.printStackTrace();
+			curMatrix[position / Table.ROW][position % Table.ROW] = 0;
+			adapter.notifyDataSetInvalidated();
+			T("发生冲突啦!");
+		}
+
+	}
+	
+	
 	class GvAdapter extends BaseAdapter {
 
 		Context context;
@@ -263,4 +265,5 @@ public class Game extends BaseFragment {
 		}
 
 	}
+
 }

@@ -4,7 +4,11 @@ import io.github.jayin.sudoku.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-
+/**
+ * 解答ing
+ * @author Jayin
+ *
+ */
 public class LoadDialog extends Dialog {
 	public LoadDialog(Context context) {
 		this(context, android.R.style.Theme_DeviceDefault_Dialog_NoActionBar);
