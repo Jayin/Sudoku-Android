@@ -52,4 +52,29 @@ public class U {
 		return rawMatrix;
 	}
 
+	public static String readJsonFile(Context context, int lv) {
+		String file_name = Sudoku_Folder + lv + File.separator + lv + ".json";
+		String json = "";
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(context.getAssets()
+					.open(file_name)));
+			String lineString = null;
+			while ((lineString = br.readLine()) != null) {
+				json += lineString;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return json;
+	}
+
 }

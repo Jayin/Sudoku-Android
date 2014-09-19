@@ -8,6 +8,7 @@ __author__ = 'Jayin Ton'
 
 ignores = [
   r'.*~',
+  r'.*json'
 ]
 
 def file_filter(file_name):
@@ -19,13 +20,15 @@ def file_filter(file_name):
 
 
 
-for x in range(1,4,1):
+for x in range(1,5,1):
     files = filter(file_filter, os.listdir(('./{0}/'.format(x))))
+    print(files);
     result = json.dumps({
       ' update_time' : long(time.time())
       ,'size' : len(files)
 
     })
+
     with open('./{0}/{1}.json'.format(x,x),mode='w') as f:
         f.write(result)
 

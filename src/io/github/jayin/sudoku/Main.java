@@ -1,8 +1,9 @@
 package io.github.jayin.sudoku;
 
+
 import io.github.jayin.sudoku.fragment.About;
 import io.github.jayin.sudoku.fragment.Introduction;
-import io.github.jayin.sudoku.fragment.SelectSudoku;
+import io.github.jayin.sudoku.fragment.SelectLevel;
 import android.app.ActionBar;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -38,7 +39,7 @@ public class Main extends BaseActivity implements View.OnClickListener {
 
 		// DrawerLayout
 		mDrawerLayout = getView(R.id.drawer_layout);
-		setMainFragment(new SelectSudoku());
+		setMainFragment(new SelectLevel());
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
 				R.drawable.ic_drawer, R.string.drawer_open,
 				R.string.drawer_close);
@@ -51,7 +52,11 @@ public class Main extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void setMainFragment(Fragment fragment) {
-		mFragmentManager.beginTransaction().replace(R.id.container, fragment)
+		 
+		mFragmentManager.beginTransaction().setCustomAnimations(R.anim.fragment_slide_left_enter,
+                R.anim.fragment_slide_left_exit,
+                R.anim.fragment_slide_right_enter,
+                R.anim.fragment_slide_right_exit).replace(R.id.container, fragment)
 				.commit();
 	}
 
@@ -121,7 +126,7 @@ public class Main extends BaseActivity implements View.OnClickListener {
 			setMainFragment(new Introduction());
 			break;
 		case R.id.btn_select:
-			setMainFragment(new SelectSudoku());
+			setMainFragment(new SelectLevel());
 			break;
 		default:
 			T("default");
