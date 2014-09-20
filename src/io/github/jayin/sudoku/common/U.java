@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -62,17 +63,15 @@ public class U {
 		}
 		return rawMatrix;
 	}
-
-	public static String readJsonFile(Context context, int lv) {
-		String file_name = Sudoku_Folder + lv + File.separator + lv + ".json";
-		String json = "";
+	
+	public static String readFile(InputStream in){
+		String s = "";
 		BufferedReader br = null;
 		try {
-			br = new BufferedReader(new InputStreamReader(context.getAssets()
-					.open(file_name)));
+			br = new BufferedReader(new InputStreamReader(in));
 			String lineString = null;
 			while ((lineString = br.readLine()) != null) {
-				json += lineString;
+				s += lineString;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -85,7 +84,19 @@ public class U {
 				}
 			}
 		}
-		return json;
+		return s;
+	}
+
+	public static String readJsonFile(Context context, int lv) {
+		String file_name = Sudoku_Folder + lv + File.separator + lv + ".json";
+		String json = "";
+		try {
+			return readFile(context.getAssets()
+					.open(file_name));
+		} catch (IOException e) {
+			e.printStackTrace();
+			return json;
+		}
 	}
 	
 	public static String getSDPath(){ 

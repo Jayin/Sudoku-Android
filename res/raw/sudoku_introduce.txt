@@ -1,0 +1,78 @@
+<p>
+	<strong>&nbsp; &nbsp; &nbsp; &nbsp;数独</strong>&nbsp;是一种逻辑性的数字填充游戏，玩家须以数字填进每一格，而每行、每列和每个宫（即3x3的大格）有齐1至9所有数字。游戏设计者会提供一部份的数字，使谜题只有一个答案。
+</p>
+<p>
+	&nbsp; &nbsp; &nbsp;一个已解答的数独其实是一种多了宫的限制的拉丁方阵，因为同一个数字不可能在同一行、列或宫中出现多于一次。
+</p>
+<p>
+	这种游戏只需要逻辑思维能力，与数字运算无关。虽然玩法简单，但数字排列方式却千变万化，所以不少教育者认为数独是锻炼脑筋的好方法。因为数独上的数字没有运算价值，仅仅代表相互区分的不同个体，因此可以使用其他的符号比如拉丁字母、罗马字母甚至是不图形状的图案代替。
+</p>
+<p>
+	&nbsp; &nbsp; &nbsp;数独是由日本的游戏公司Nikoli在1986年发扬光大的，名称“数独”的意思是“一个数字”。
+</p>
+<p>
+	<br />
+</p>
+<h2>
+	数独直观法解题技巧
+</h2>
+<p>
+	<span style="line-height:1.5;">1.联除法</span> 
+</p>
+<p>
+	<span style="line-height:1.5;">&nbsp; &nbsp; 在并排的三个九宫格中的两排寻找相同数字，再利用九宫格得出另一排中该数字位置,该方法适用于中高级数独</span><span style="line-height:1.5;">.</span> 
+</p>
+<p>
+	2.巡格法
+</p>
+<p>
+	<span style="line-height:1.5;">&nbsp; &nbsp; 找出在每个九宫格中出现频率较高的数字，得出该数字在其余九宫格内位置,该方法应用于方法一之后。</span> 
+</p>
+<div class="para" style="margin:15px 0px 5px;">
+	3.排除法
+</div>
+<p>
+	<span style="line-height:1.5;">&nbsp; &nbsp; 这个方法是解决问题的关键，易被常人所忽略。在各行列或九宫格中观察,若有个位置其它数字都不能填，就填余下的数字</span> 
+</p>
+<p>
+	4.待定法
+</p>
+<p>
+	<span style="line-height:1.5;">&nbsp; &nbsp; 此方法不常用却很有效。暂时确定某个数字在某个区域,</span>再利用<span style="line-height:1.5;">其来进行排除</span> 
+</p>
+<p>
+	5.行列法
+</p>
+<p>
+	<span style="line-height:1.5;">&nbsp; &nbsp; 此方法用于收官阶段，利用先从行列突破来提高解题效率。</span> 
+</p>
+<div class="para" style="margin:15px 0px 5px;">
+	6.假设法
+</div>
+<p>
+	<span style="line-height:1.5;">&nbsp; &nbsp; 即在某个位置</span>随机<span style="line-height:1.5;">的填上一个数字，再进行推演,并有可能最终产生矛盾而否定结论。</span> 
+</p>
+<div class="para" style="margin:15px 0px 5px;">
+	7.频率法
+</div>
+<p>
+	<span style="line-height:1.5;">&nbsp; &nbsp; 这种方法相比于上一种方法更能提高效率。在某一行列或九宫格列举出所有情况，再选择某位置中出现频率高的数字</span> 
+</p>
+<div class="para" style="margin:15px 0px 5px;">
+	8.候选数法
+</div>
+<p>
+	<span style="line-height:1.5;">&nbsp; &nbsp; 使用候选数法解数独题目需先建立候选<span>数列</span></span><span style="line-height:1.5;">表，根据各种条件，逐步安全的清除每个宫格候选数的不可能取值的候选数，从而达到解题的目的。</span> 
+</p>
+<div class="para" style="margin:15px 0px 5px;">
+	&nbsp; &nbsp; 使用候选数法一般能解比较复杂的数独题目，但是候选数法的使用没有直观法那么直接，需要先建立一个候选数列表的准备过程，所以实际使用时可以先利用直观法进行解题，到无法用直观法解题时再使用候选数法解题。
+</div>
+<div class="para" style="margin:15px 0px 5px;">
+	&nbsp; &nbsp; 候选数法解题的过程就是逐渐排除不合适的候选数的过程，所以在进行候选数删除的时候一定要小心，确定安全地删除不合适的候选数，否则，很多时候只有重新做题了。有了计算机软件的帮助，使得候选数表的维护变得轻松起来。
+</div>
+<p>
+	<br />
+</p>
+<p>
+	<br />
+</p>
