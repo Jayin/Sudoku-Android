@@ -1,11 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"     android:background="@android:color/black">
+    android:background="@android:color/black" >
 
-    <TextView
-        style="@style/TextView.DrawerLayout"
-        android:text="about...." />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical" >
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_icon" />
+
+        <LinearLayout
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_horizontal">
+            <TextView style="@style/TextView"
+                android:text="数独Sudoku v"/>
+            
+             <TextView android:id="@+id/tv_version" style="@style/TextView"
+                android:text="1.0.0"/>
+        </LinearLayout>
+        
+         <LinearLayout
+            android:layout_marginTop="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical" android:gravity="center_horizontal">
+            <TextView style="@style/TextView" android:textSize="12sp"
+                android:text="基于The MIT License (MIT)开放源代码"/>
+            
+             <TextView style="@style/TextView" android:textSize="12sp"
+                android:text="https://github.com/Jayin/Sudoku-Android" android:autoLink="web"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>
