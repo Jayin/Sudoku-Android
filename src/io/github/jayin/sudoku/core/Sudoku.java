@@ -194,4 +194,8 @@ public class Sudoku {
 	public PendingNode getPendingNode(int x,int y){
 		return table.getPendingNode(x, y);
 	}
+	
+	public List<PendingNode> getPendingNodes(){
+		return table.getPendingNodes();
+	}
 }

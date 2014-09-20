@@ -1,7 +1,6 @@
 package io.github.jayin.sudoku.fragment;
 
 import io.github.jayin.sudoku.R;
-import io.github.jayin.sudoku.common.AndroidUtils;
 import io.github.jayin.sudoku.common.LoadDialog;
 import io.github.jayin.sudoku.common.SelectDialog;
 import io.github.jayin.sudoku.common.SelectDialog.onNumberSelectListener;
@@ -9,8 +8,10 @@ import io.github.jayin.sudoku.common.TimeRecorderTextView;
 import io.github.jayin.sudoku.common.U;
 import io.github.jayin.sudoku.core.Sudoku;
 import io.github.jayin.sudoku.core.Table;
+import io.github.jayin.sudoku.core.Table.PendingNode;
 
 import java.io.File;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -125,8 +126,25 @@ public class Game extends BaseFragment implements onNumberSelectListener {
 			timeRecorder.clean();
 			new SolveTask().execute();
 			return true;
-		}else if(item.getItemId() == R.id.tips){
-			gv.getChildAt(12).startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.zoom_out_in));
+		} else if (item.getItemId() == R.id.tips) {
+			int[][] tmpMatrix = new int[Table.ROW][Table.ROW];
+			U.copyMatrix(tmpMatrix, curMatrix);
+			try {
+				List<PendingNode> nodes = new Sudoku().init(tmpMatrix)
+						.getPendingNodes();
+				if (nodes.size() > 0) {
+					int position = nodes.get(0).getY() * Table.ROW
+							+ nodes.get(0).getX();
+					System.out.println("X = "+nodes.get(0).getX());
+					System.out.println("Y = "+nodes.get(0).getY());
+					System.out.println("positon-->"+position);
+					gv.getChildAt(position).startAnimation(
+							AnimationUtils.loadAnimation(getContext(),
+									R.anim.translate_left_right));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -158,9 +176,9 @@ public class Game extends BaseFragment implements onNumberSelectListener {
 			curMatrix[position / Table.ROW][position % Table.ROW] = number;
 			new Sudoku().init(curMatrix);
 			adapter.notifyDataSetInvalidated();
-			if(checkMatrix()){
+			if (checkMatrix()) {
 				musicFinish();
-			}else{
+			} else {
 				musicAddNumber();
 			}
 		} catch (Exception e) {
