@@ -29,3 +29,16 @@ Framgent能让开发分层更好，目前遇到个需求:当切换不同的Fragm
 		setHasOptionsMenu(true);
 	}
 ```
+
+9.19
+===
+
+在玩Sudoku的时候，点击空白框，然后选择数字，接着数字就会填到表中(GridView)
+
+一开始我的做法是Game Fragment onCreate()中注册一个BroadcastReceiver(在onDestroy中注销),然后Select Dialog中选着后就发广播
+
+但是，这根本不起作用！
+我的最后方案是，在Select Dialog 中设置回调接口，才发现，这才是最合理？
+
+至于为啥不行？onActivityAttch
+
