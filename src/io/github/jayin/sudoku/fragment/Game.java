@@ -133,11 +133,8 @@ public class Game extends BaseFragment implements onNumberSelectListener {
 				List<PendingNode> nodes = new Sudoku().init(tmpMatrix)
 						.getPendingNodes();
 				if (nodes.size() > 0) {
-					int position = nodes.get(0).getY() * Table.ROW
-							+ nodes.get(0).getX();
-					System.out.println("X = "+nodes.get(0).getX());
-					System.out.println("Y = "+nodes.get(0).getY());
-					System.out.println("positon-->"+position);
+					int position = nodes.get(0).getX() * Table.ROW
+							+ nodes.get(0).getY();
 					gv.getChildAt(position).startAnimation(
 							AnimationUtils.loadAnimation(getContext(),
 									R.anim.translate_left_right));
