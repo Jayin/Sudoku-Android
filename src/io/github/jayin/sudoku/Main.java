@@ -139,5 +139,4 @@ public class Main extends BaseActivity implements View.OnClickListener {
 			break;
 		}
 	}
-
 }

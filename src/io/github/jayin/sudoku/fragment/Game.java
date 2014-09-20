@@ -3,9 +3,9 @@ package io.github.jayin.sudoku.fragment;
 import io.github.jayin.sudoku.R;
 import io.github.jayin.sudoku.common.LoadDialog;
 import io.github.jayin.sudoku.common.SelectDialog;
+import io.github.jayin.sudoku.common.SelectDialog.onNumberSelectListener;
 import io.github.jayin.sudoku.common.TimeRecorderTextView;
 import io.github.jayin.sudoku.common.U;
-import io.github.jayin.sudoku.common.SelectDialog.onNumberSelectListener;
 import io.github.jayin.sudoku.core.Sudoku;
 import io.github.jayin.sudoku.core.Table;
 
@@ -15,6 +15,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -29,8 +31,9 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
 
-public class Game extends BaseFragment implements onNumberSelectListener{
+public class Game extends BaseFragment implements onNumberSelectListener {
 	private int lv, num;
+	private MediaPlayer mMediaPlayer;
 	GridView gv;
 	GvAdapter adapter;
 	SelectDialog selectDialog;
@@ -57,7 +60,7 @@ public class Game extends BaseFragment implements onNumberSelectListener{
 		}
 		// 通知系统刷新这里的OptionMenu
 		setHasOptionsMenu(true);
-		
+
 	}
 
 	@Override public View onCreateView(LayoutInflater inflater,
@@ -66,8 +69,7 @@ public class Game extends BaseFragment implements onNumberSelectListener{
 		View v = inflater.inflate(R.layout.fragment_game, container, false);
 		selectDialog = new SelectDialog(getActivity());
 		selectDialog.setOnNumberSelectListener(this);
-		
-		
+
 		loadDialog = new LoadDialog(getActivity());
 		U.copyMatrix(rawMatrix, U.readMatrix(getContext(), lv, num));
 		U.copyMatrix(curMatrix, rawMatrix);
@@ -80,17 +82,18 @@ public class Game extends BaseFragment implements onNumberSelectListener{
 
 		return v;
 	}
-	
-	
-	private void share(){
+
+	private void share() {
 		U.screenShot(getView());
-		String text = "这个数独我耗时 "+timeRecorder.getText() +" !不服?想挑战我?赶紧下载来玩玩吧！";
-		
+		String text = "这个数独我耗时 " + timeRecorder.getText()
+				+ " !不服?想挑战我?赶紧下载来玩玩吧！";
+
 		Intent sendIntent = new Intent();
 		sendIntent.setAction(Intent.ACTION_SEND);
 		sendIntent.setType("image/*");
-		sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(U.getScreenShotPath())));
-		sendIntent.putExtra(Intent.EXTRA_TEXT,text);
+		sendIntent.putExtra(Intent.EXTRA_STREAM,
+				Uri.fromFile(new File(U.getScreenShotPath())));
+		sendIntent.putExtra(Intent.EXTRA_TEXT, text);
 		sendIntent.putExtra("Kdescription", text);
 		startActivity(sendIntent);
 	}
@@ -103,6 +106,10 @@ public class Game extends BaseFragment implements onNumberSelectListener{
 	@Override public void onPause() {
 		super.onPause();
 		timeRecorder.stopTiming();
+	}
+
+	@Override public void onDestroy() {
+		super.onDestroy();
 	}
 
 	@Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -120,7 +127,7 @@ public class Game extends BaseFragment implements onNumberSelectListener{
 		return super.onOptionsItemSelected(item);
 	}
 
-	private void checkMatrix() {
+	private boolean checkMatrix() {
 		Sudoku sudoku = new Sudoku();
 		if (sudoku.check(curMatrix)) {
 			AlertDialog dialog = new AlertDialog.Builder(getContext())
@@ -136,26 +143,52 @@ public class Game extends BaseFragment implements onNumberSelectListener{
 							}).create();
 			dialog.show();
 			timeRecorder.stopTiming();
+			return true;
 		}
+		return false;
 	}
-
 
 	@Override public void onSelect(int position, int number) {
 		try {
 			curMatrix[position / Table.ROW][position % Table.ROW] = number;
 			new Sudoku().init(curMatrix);
 			adapter.notifyDataSetInvalidated();
-			checkMatrix();
+			if(checkMatrix()){
+				musicFinish();
+			}else{
+				musicAddNumber();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			curMatrix[position / Table.ROW][position % Table.ROW] = 0;
 			adapter.notifyDataSetInvalidated();
 			T("发生冲突啦!");
 		}
-
 	}
-	
-	
+
+	public void playMusic(int resId) {
+		mMediaPlayer = MediaPlayer.create(getContext(), resId);
+		try {
+			mMediaPlayer.start();
+			mMediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+
+				@Override public void onCompletion(MediaPlayer mp) {
+					mp.release();
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void musicAddNumber() {
+		playMusic(R.raw.voice_add_number);
+	}
+
+	public void musicFinish() {
+		playMusic(R.raw.voice_finish);
+	}
+
 	class GvAdapter extends BaseAdapter {
 
 		Context context;
@@ -265,5 +298,4 @@ public class Game extends BaseFragment implements onNumberSelectListener{
 		}
 
 	}
-
 }
