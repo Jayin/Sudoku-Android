@@ -12,6 +12,7 @@
         android:text="hi" android:textColor="@android:color/white" />
 
     <GridView
+        android:layoutAnimation="@anim/layout_wave_scale"
         android:id="@+id/gv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -49,9 +49,9 @@ public class SudokuList extends BaseFragment {
 			e.printStackTrace();
 			size = 1;
 		}
-		D("size="+size+" lv="+lv);
 		listView  =getView(v, R.id.lv_sudokulist);
-		listView.setAdapter(new SudokuListAdapter());
+		adapter  =new SudokuListAdapter();
+		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override public void onItemClick(AdapterView<?> parent, View view,

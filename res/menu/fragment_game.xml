@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    <item android:id="@+id/surrender" android:title="认输" android:showAsAction="always"></item>
+
+    <item
+        android:id="@+id/surrender"
+        android:showAsAction="always"
+        android:title="认输">
+    </item>
+    <item
+        android:id="@+id/tips"
+        android:showAsAction="always"
+        android:title="提示">
+    </item>
+
 </menu>

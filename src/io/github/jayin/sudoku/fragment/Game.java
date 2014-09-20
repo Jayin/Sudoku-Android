@@ -1,6 +1,7 @@
 package io.github.jayin.sudoku.fragment;
 
 import io.github.jayin.sudoku.R;
+import io.github.jayin.sudoku.common.AndroidUtils;
 import io.github.jayin.sudoku.common.LoadDialog;
 import io.github.jayin.sudoku.common.SelectDialog;
 import io.github.jayin.sudoku.common.SelectDialog.onNumberSelectListener;
@@ -27,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -122,6 +124,9 @@ public class Game extends BaseFragment implements onNumberSelectListener {
 			T("鄙视你,居然认输..");
 			timeRecorder.clean();
 			new SolveTask().execute();
+			return true;
+		}else if(item.getItemId() == R.id.tips){
+			gv.getChildAt(12).startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.zoom_out_in));
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
