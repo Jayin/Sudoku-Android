@@ -45,7 +45,7 @@ public class U {
 				}
 				line++;
 				//only read Line 0-8
-				if(line == 8){
+				if(line == 9){
 					break;
 				}
 			}
