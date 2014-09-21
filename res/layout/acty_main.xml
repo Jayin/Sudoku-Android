@@ -27,21 +27,21 @@
             <TextView
                 android:id="@+id/btn_select"
                 style="@style/TextView.DrawerLayout"
-                android:text="Select Sudoku" />
+                android:text="开始游戏" />
 
             <View style="@style/Line.vertical" />
 
             <TextView
                     android:id="@+id/btn_introduction"
                 style="@style/TextView.DrawerLayout"
-                android:text="Introduction" />
+                android:text="数独简介" />
 
             <View style="@style/Line.vertical" />
 
             <TextView
                     android:id="@+id/btn_about"
                 style="@style/TextView.DrawerLayout"
-                android:text="About App" />
+                android:text="关    于" />
 
             <View style="@style/Line.vertical" />
         </LinearLayout>
