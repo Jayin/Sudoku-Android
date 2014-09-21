@@ -300,8 +300,10 @@ public class Game extends BaseFragment implements onNumberSelectListener {
 		}
 
 		@Override protected void onPostExecute(Void result) {
-			adapter = new GvAdapter(getActivity());
-			gv.setAdapter(adapter);
+			if(loadDialog.isShowing()){
+				adapter = new GvAdapter(getActivity());
+				gv.setAdapter(adapter);
+			}
 			loadDialog.dismiss();
 		}
 
