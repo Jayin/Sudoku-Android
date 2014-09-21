@@ -40,7 +40,7 @@ public class Main extends BaseActivity implements View.OnClickListener {
 
 		// DrawerLayout
 		mDrawerLayout = getView(R.id.drawer_layout);
-		setMainFragment(new SelectLevel());
+		mFragmentManager.beginTransaction().add(R.id.container,new SelectLevel()).commit();
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
 				R.drawable.ic_drawer, R.string.drawer_open,
 				R.string.drawer_close);
@@ -53,7 +53,6 @@ public class Main extends BaseActivity implements View.OnClickListener {
 	}
 
 	public void setMainFragment(Fragment fragment) {
-		 
 		mFragmentManager.beginTransaction().setCustomAnimations(R.anim.fragment_slide_left_enter,
                 R.anim.fragment_slide_left_exit,
                 R.anim.fragment_slide_right_enter,
