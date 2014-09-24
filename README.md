@@ -1,14 +1,15 @@
 Sudoku-Android
 ===
->In fact,this project is my lesson design of data structure.  
-An Android game for Sudoku,build for fun.
+>这是我的数据结构课程设计
 
+算法部分是翻译大一上学期的用C++写的算法，这里只是做个翻译.  
+[C++ 版本](https://github.com/Jayin/sudoku/blob/master/clang/sudoku.cpp)
 
-Development Record
+开发日志
 ===
 see [DEV.md](DEV.md)
 
 
-License
+开源协议
 ===
 MIT
