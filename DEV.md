@@ -40,5 +40,4 @@ Framgent能让开发分层更好，目前遇到个需求:当切换不同的Fragm
 但是，这根本不起作用！
 我的最后方案是，在Select Dialog 中设置回调接口，才发现，这才是最合理？
 
-至于为啥不行？onActivityAttch
 
